@@ -1,19 +1,26 @@
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kuit4_android_retrofit.data.CategoryData
-import com.example.kuit4_android_retrofit.databinding.ItemCategoryBinding
+import com.bumptech.glide.Glide
+import com.example.kuit4_android_retrofit.data.MenuData
+import com.example.kuit4_android_retrofit.databinding.ItemPopularMenuBinding
 
 class RVPopularMenuAdapter(
-    private val menuList: List<CategoryData>,
+    private val context: Context,
+    private val menuList: List<MenuData>,
 ) : RecyclerView.Adapter<RVPopularMenuAdapter.ViewHolder>() {
     inner class ViewHolder(
-        private val binding: ItemCategoryBinding,
+        private val binding: ItemPopularMenuBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CategoryData) {
-            binding.sivCategoryImg.setImageResource(item.categoryImg)
-            binding.tvCategoryName.text = item.categoryName
+        fun bind(item: MenuData) {
+            binding.tvPopularMenuName.text = item.menuName
+            binding.tvPopularMenuTime.text = item.eta
+            binding.tvPopularMenuRate.text = item.rating
+            Glide.with(context)
+                .load(item.menuImgUrl)
+                .into(binding.ivPopularMenuImg)
         }
     }
 
@@ -22,7 +29,7 @@ class RVPopularMenuAdapter(
         viewType: Int,
     ): ViewHolder {
         val binding =
-            ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemPopularMenuBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
