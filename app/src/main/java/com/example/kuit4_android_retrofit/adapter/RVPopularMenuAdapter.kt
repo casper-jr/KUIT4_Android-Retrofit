@@ -16,8 +16,8 @@ class RVPopularMenuAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MenuData) {
             binding.tvPopularMenuName.text = item.menuName
-            binding.tvPopularMenuTime.text = item.eta
-            binding.tvPopularMenuRate.text = item.rating
+            binding.tvPopularMenuTime.text = item.eta.toString()+"분"
+            binding.tvPopularMenuRate.text = item.rating.toString()
             Glide.with(context)
                 .load(item.menuImgUrl)
                 .into(binding.ivPopularMenuImg)

@@ -6,6 +6,6 @@ import androidx.room.Entity
 data class MenuData(
     val menuName: String,
     val menuImgUrl: String,
-    val rating: String,
-    val eta: String
+    val rating: Double,
+    val eta: Int
 )

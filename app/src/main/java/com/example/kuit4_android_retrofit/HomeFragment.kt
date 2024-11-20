@@ -130,7 +130,7 @@ class HomeFragment : Fragment() {
         with(binding.rvMainPopularMenus){
             adapter = rvAdapterPopular
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(requireContext())
         }
     }
 
