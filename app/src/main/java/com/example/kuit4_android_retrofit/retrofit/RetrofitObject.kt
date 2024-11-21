@@ -1,10 +1,12 @@
 package com.example.kuit4_android_retrofit.retrofit
 
+import com.example.kuit4_android_retrofit.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitObject {
-    private const val BASE_URL = "https://673b2f88339a4ce4451b0553.mockapi.io/kuit/"
+    //BuildConfig에서 가져와서 사용
+    private const val BASE_URL = BuildConfig.BASE_URL
 
     val retrofit: Retrofit =
         Retrofit
