@@ -286,7 +286,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showPopularMenuOptionsDialog(popularMenu: MenuData){
+    fun showPopularMenuOptionsDialog(popularMenu: MenuData){
         val options = arrayOf("수정", "삭제")
 
         AlertDialog
@@ -351,6 +351,13 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        //"취소" 버튼 클릭 시
+        dialogBinding.btnCancelPopularMenu.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun updatePopularMenu(updatedMenu: MenuData){
@@ -514,11 +521,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRVPopularMenu(popularList: List<MenuData>){
-        rvAdapterPopular = RVPopularMenuAdapter(requireContext(),popularList) { menuData ->
-            showPopularMenuOptionsDialog(
-                menuData
-            )
-        }
+        rvAdapterPopular = RVPopularMenuAdapter(requireContext(),popularList,this)
         with(binding.rvMainPopularMenus){
             adapter = rvAdapterPopular
             layoutManager =

@@ -1,23 +1,18 @@
 package com.example.kuit4_android_retrofit.adapter
 
-import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.kuit4_android_retrofit.R
 import com.example.kuit4_android_retrofit.data.MenuData
-import com.example.kuit4_android_retrofit.databinding.DialogAddPopularMenuBinding
 import com.example.kuit4_android_retrofit.databinding.ItemPopularMenuBinding
 import com.example.kuit4_android_retrofit.HomeFragment
 
 class RVPopularMenuAdapter(
     private val context: Context,
     private var menuList: List<MenuData>,
-    private val showDialog: (MenuData) -> Unit
+    private val fragment: HomeFragment
 ) : RecyclerView.Adapter<RVPopularMenuAdapter.ViewHolder>() {
     inner class ViewHolder(
         private val binding: ItemPopularMenuBinding,
@@ -28,7 +23,7 @@ class RVPopularMenuAdapter(
             binding.tvPopularMenuRate.text = item.rating.toString()
             //인자로 받은 함수 호출
             binding.root.setOnClickListener {
-                showDialog(item)
+                fragment.showPopularMenuOptionsDialog(item)
             }
 
             Glide.with(context)
