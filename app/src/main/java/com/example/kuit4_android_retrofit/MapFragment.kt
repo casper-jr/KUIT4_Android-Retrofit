@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.kuit4_android_retrofit.databinding.FragmentMapBinding
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -58,6 +60,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         naverMap.locationTrackingMode = LocationTrackingMode.Follow
         //ui 설정 관련
         naverMap.uiSettings.isLocationButtonEnabled = true
+        //카메라 초기 위치 설정
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5423265, 127.0759204))
+        naverMap.moveCamera(cameraUpdate)
     }
 
 }
