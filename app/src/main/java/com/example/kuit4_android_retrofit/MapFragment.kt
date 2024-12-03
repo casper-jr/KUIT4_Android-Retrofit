@@ -57,6 +57,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         mapFragment.getMapAsync(this)
 
+        initBottomSheet()
+
+    }
+
+    override fun onMapReady(naverMap: NaverMap) {
+        this.naverMap = naverMap
+        //현재 위치 데이터 제공
+        naverMap.locationSource = locationSource
+        //사용자 현재 위치를 추적
+        naverMap.locationTrackingMode = LocationTrackingMode.Follow
+        //ui 설정 관련
+        naverMap.uiSettings.isLocationButtonEnabled = true
+        //카메라 초기 위치 설정
+        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5423265, 127.0759204))
+        naverMap.moveCamera(cameraUpdate)
+    }
+
+    private fun initBottomSheet(){
         //bottom sheet 가져오기
         val bottomSheet = binding.llBottomSheetMap
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -95,21 +113,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
-
-
     }
-
-    override fun onMapReady(naverMap: NaverMap) {
-        this.naverMap = naverMap
-        //현재 위치 데이터 제공
-        naverMap.locationSource = locationSource
-        //사용자 현재 위치를 추적
-        naverMap.locationTrackingMode = LocationTrackingMode.Follow
-        //ui 설정 관련
-        naverMap.uiSettings.isLocationButtonEnabled = true
-        //카메라 초기 위치 설정
-        val cameraUpdate = CameraUpdate.scrollTo(LatLng(37.5423265, 127.0759204))
-        naverMap.moveCamera(cameraUpdate)
-    }
-
 }
