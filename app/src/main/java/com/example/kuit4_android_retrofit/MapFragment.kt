@@ -5,8 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.example.kuit4_android_retrofit.databinding.FragmentMapBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -25,11 +29,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 
+    //bottom sheet 사용하려고 선언
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+
     }
 
     override fun onCreateView(
@@ -49,6 +56,46 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 childFragmentManager.beginTransaction().add(R.id.fcv_map, it).commit()
             }
         mapFragment.getMapAsync(this)
+
+        //bottom sheet 가져오기
+        val bottomSheet = binding.llBottomSheetMap
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        //초기상태
+        bottomSheetBehavior.isFitToContents = true //content 크기에 맞게 확장
+        bottomSheetBehavior.isHideable = false //숨김상태 비활성화
+        bottomSheetBehavior.peekHeight = 40 //collapsed 상태의 높이
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        binding.btnBottomSheetMap.text = "Expand Bottom Sheet"
+        //상태 변경 처리
+        bottomSheetBehavior.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback(){
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState){
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        binding.btnBottomSheetMap.text = "Collapse Bottom Sheet"
+                    }
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        binding.btnBottomSheetMap.text = "Expand Bottom Sheet"
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+
+        })
+
+        //버튼 클릭시 열고 닫기
+        binding.btnBottomSheetMap.setOnClickListener {
+            when(bottomSheetBehavior.state){
+                BottomSheetBehavior.STATE_COLLAPSED -> {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                }
+                BottomSheetBehavior.STATE_EXPANDED -> {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
+            }
+        }
+
 
     }
 
