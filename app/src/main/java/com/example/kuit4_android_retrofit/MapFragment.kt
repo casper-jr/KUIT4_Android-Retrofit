@@ -1,5 +1,6 @@
 package com.example.kuit4_android_retrofit
 
+import android.app.AlertDialog
 import android.os.Binder
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import com.example.kuit4_android_retrofit.databinding.DialogAddPinBinding
 import com.example.kuit4_android_retrofit.databinding.FragmentMapBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.naver.maps.geometry.LatLng
@@ -17,7 +18,9 @@ import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 
 class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
@@ -96,13 +99,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
-
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
-
         })
 
-        //버튼 클릭시 열고 닫기
+        //버튼 클릭시 bottom sheet 열고 닫기
         binding.btnBottomSheetMap.setOnClickListener {
             when(bottomSheetBehavior.state){
                 BottomSheetBehavior.STATE_COLLAPSED -> {
@@ -113,5 +114,60 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
+
+        //add pin 버튼 누르면 위도 경도 입력하는 dialog 출력
+        binding.btnAddPin.setOnClickListener {
+            showAddPinDialog()
+        }
+    }
+
+    private fun showAddPinDialog(){
+        val dialogBinding = DialogAddPinBinding.inflate(LayoutInflater.from(requireContext()))
+
+        val dialog =
+            AlertDialog
+                .Builder(requireContext())
+                .setView(dialogBinding.root)
+                .create()
+
+        //"추가" 클릭시의 동작
+        dialogBinding.btnAddPin.setOnClickListener {
+            val latitude =
+                dialogBinding.etLatitude.text
+                    .toString()
+                    .trim()
+                    .toDoubleOrNull()
+            val longitude =
+                dialogBinding.etLongitude.text
+                    .toString()
+                    .trim()
+                    .toDoubleOrNull()
+
+            if(latitude != null && longitude != null){
+                //새 마커 만들기
+                addPinToMap(latitude,longitude)
+                dialog.dismiss()
+            }else{
+                Toast.makeText(requireContext(), "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        //"취소" 버튼 클릭시 동작
+        dialogBinding.btnCancelPin.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //지도에 위도 경도 값 받아서 marker 추가하는 함수
+    private fun addPinToMap(latitude: Double, longitude: Double){
+        val newPin = Marker()
+        newPin.position = LatLng(latitude, longitude)
+        newPin.map = naverMap
+        newPin.width = 30
+        newPin.height = 40
+        newPin.icon = MarkerIcons.RED //OverlayImage.fromResource(R.drawable. )처럼 지정도 가능
+
     }
 }
